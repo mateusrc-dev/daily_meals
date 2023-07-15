@@ -17,5 +17,8 @@ defmodule DailyMeals.Meal do
   def changeset(params) do
     %__MODULE__{}
     |> cast(params, @required_params)
+    |> validate_required(@required_params)
+    |> validate_length(:description, min: 10)
+    |> validate_format(:calories, ~r/cal/)
   end
 end
