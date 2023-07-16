@@ -1,4 +1,5 @@
 defmodule DailyMealsWeb.MealsController do
+  # alias DailyMealsWeb.MealsView
   use DailyMealsWeb, :controller
   alias DailyMeals.Meal
   alias DailyMealsWeb.FallbackController
@@ -24,6 +25,14 @@ defmodule DailyMealsWeb.MealsController do
       conn
       |> put_status(:created)
       |> render("create.json", meal: meal)
+    end
+  end
+
+  def delete(conn, %{"id" => id}) do
+    with {:ok, %Meal{}} <- DailyMeals.delete_meal(id) do
+      conn
+      |> put_status(:no_content)
+      |> text("")
     end
   end
 

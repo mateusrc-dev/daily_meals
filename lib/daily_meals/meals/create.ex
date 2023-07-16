@@ -1,5 +1,5 @@
 defmodule DailyMeals.Meals.Create do
-  alias DailyMeals.{Meal, Repo}
+  alias DailyMeals.{Error, Meal, Repo}
   alias DailyMeals.Meal
 
   def call(params) do
@@ -14,6 +14,6 @@ defmodule DailyMeals.Meals.Create do
   end
 
   defp handle_insert({:error, result}) do
-    {:error, %{status: :bad_request, result: result}}
+    {:error, Error.build(:bad_request, result)}
   end
 end
