@@ -9,6 +9,7 @@ defmodule DailyMealsWeb.Router do
     pipe_through :api
 
     get "/", WelcomeController, :index
+    resources "/meals/", MealsController, except: [:new, :edit]
   end
 
   # Enables LiveDashboard only for development

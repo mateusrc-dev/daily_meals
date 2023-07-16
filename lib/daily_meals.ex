@@ -1,9 +1,5 @@
 defmodule DailyMeals do
-  @moduledoc """
-  DailyMeals keeps the contexts that define your domain
-  and business logic.
+  alias DailyMeals.Meals.Create, as: MealCreate
 
-  Contexts are also responsible for managing your data, regardless
-  if it comes from the database, an external API or others.
-  """
+  defdelegate create_meal(params), to: MealCreate, as: :call
 end
