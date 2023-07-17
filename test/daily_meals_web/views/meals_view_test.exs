@@ -24,4 +24,23 @@ defmodule DailyMealsWeb.MealsViewTest do
              message: "Meal created!"
            } = response
   end
+
+  test "renders meal.json" do
+    meal = build(:meal)
+
+    %{date: date_meal} = meal
+
+    response = render(MealsView, "meal.json", meal: meal)
+
+    assert %{
+             meal: %Meal{
+               id: "23ef65a1-294e-46c3-934e-718ea3c74499",
+               description: "comida muito muito gostosa",
+               date: date_meal,
+               calories: "1 cal",
+               inserted_at: nil,
+               updated_at: nil
+             }
+           } = response
+  end
 end

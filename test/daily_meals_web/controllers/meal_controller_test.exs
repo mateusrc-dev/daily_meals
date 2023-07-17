@@ -67,6 +67,64 @@ defmodule DailyMealsWeb.MealsControllerTest do
     end
   end
 
+  describe "show/2" do
+    test "when there is a meal with the given id, is possible show this meal in screen", %{
+      conn: conn
+    } do
+      params = %{
+        "description" => "comida muito muito gostosa",
+        "date" => "10/10/2023",
+        "calories" => "1 cal"
+      }
+
+      user =
+        conn
+        |> post(Routes.meals_path(conn, :create, params))
+        |> json_response(:created)
+
+      %{
+        "meal" => %{
+          "id" => id
+        }
+      } = user
+
+      response =
+        conn
+        |> get(Routes.meals_path(conn, :show, id))
+        |> json_response(:ok)
+
+      assert %{
+               "meal" => %{
+                 "description" => "comida muito muito gostosa",
+                 "date" => _date,
+                 "calories" => "1 cal",
+                 "id" => _id
+               }
+             } = response
+    end
+
+    test "when there is a meal with the given invalid id, returns an error", %{
+      conn: conn
+    } do
+      params = %{
+        "description" => "comida muito muito gostosa",
+        "date" => "10/10/2023",
+        "calories" => "1 cal"
+      }
+
+      conn
+      |> post(Routes.meals_path(conn, :create, params))
+      |> json_response(:created)
+
+      response =
+        conn
+        |> get(Routes.meals_path(conn, :show, "23ef65a1-294e-46c3-934e-718ea3c74499"))
+        |> json_response(:not_found)
+
+      assert %{"message" => "User not found!"} = response
+    end
+  end
+
   describe "update/2" do
     test "when all params are valid, is possible updated the meal", %{conn: conn} do
       params = %{
@@ -133,6 +191,25 @@ defmodule DailyMealsWeb.MealsControllerTest do
         |> response(:no_content)
 
       assert response == ""
+    end
+
+    test "when there is a meal with the given invalid id, returns an error", %{conn: conn} do
+      params = %{
+        "description" => "comida muito muito gostosa",
+        "date" => "10/10/2023",
+        "calories" => "1 cal"
+      }
+
+      conn
+      |> post(Routes.meals_path(conn, :create, params))
+      |> json_response(:created)
+
+      response =
+        conn
+        |> delete(Routes.meals_path(conn, :delete, "23ef65a1-294e-46c3-934e-718ea3c74499"))
+        |> json_response(:not_found)
+
+      assert %{"message" => "User not found!"} = response
     end
   end
 end
