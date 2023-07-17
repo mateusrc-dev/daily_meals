@@ -164,6 +164,73 @@ defmodule DailyMealsWeb.MealsControllerTest do
                }
              } = response
     end
+
+    test "when is not send the date, is possible updated the meal without change the date", %{
+      conn: conn
+    } do
+      params = %{
+        "description" => "comida muito muito gostosa",
+        "date" => "10/10/2023",
+        "calories" => "1 cal"
+      }
+
+      user =
+        conn
+        |> post(Routes.meals_path(conn, :create, params))
+        |> json_response(:created)
+
+      %{
+        "meal" => %{
+          "id" => id
+        }
+      } = user
+
+      params_update = %{
+        "description" => "comida muito muito gostosa maravilhosa linda deliciosa",
+        "calories" => "3 cal"
+      }
+
+      response =
+        conn
+        |> put(Routes.meals_path(conn, :update, id, params_update))
+        |> json_response(:ok)
+
+      assert %{
+               "meal" => %{
+                 "calories" => "3 cal",
+                 "date" => "2023-10-10T00:00:00Z",
+                 "description" => "comida muito muito gostosa maravilhosa linda deliciosa",
+                 "id" => _id
+               }
+             } = response
+    end
+
+    test "when there is a meal with the given invalid id, returns an error", %{conn: conn} do
+      params = %{
+        "description" => "comida muito muito gostosa",
+        "date" => "10/10/2023",
+        "calories" => "1 cal"
+      }
+
+      conn
+      |> post(Routes.meals_path(conn, :create, params))
+      |> json_response(:created)
+
+      params_update = %{
+        "description" => "comida maravilhosa linda demais maravilhosa",
+        "date" => "10/10/2021",
+        "calories" => "2 cal"
+      }
+
+      response =
+        conn
+        |> put(
+          Routes.meals_path(conn, :update, "23ef65a1-294e-46c3-934e-718ea3c74499", params_update)
+        )
+        |> json_response(:not_found)
+
+      assert %{"message" => "User not found!"} = response
+    end
   end
 
   describe "delete/2" do

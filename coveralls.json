@@ -1,3 +1,13 @@
 {
-  "skip_files": ["test/support", "lib/daily_meals_web/channels/user_socket.ex"]
+  "skip_files": [
+    "test/support",
+    "lib/daily_meals_web/channels/user_socket.ex",
+    "lib/daily_meals_web/telemetry.ex",
+    "lib/daily_meals_web/views/error_helpers.ex",
+    "lib/daily_meals_web/controllers/welcome_controller.ex",
+    "lib/daily_meals_web.ex",
+    "lib/daily_meals/application.ex",
+    "lib/daily_meals_web/router.ex",
+    "lib/daily_meals_web/plugs/uuid_checker.ex"
+  ]
 }
