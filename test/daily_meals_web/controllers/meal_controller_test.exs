@@ -67,6 +67,47 @@ defmodule DailyMealsWeb.MealsControllerTest do
     end
   end
 
+  describe "update/2" do
+    test "when all params are valid, is possible updated the meal", %{conn: conn} do
+      params = %{
+        "description" => "comida muito muito gostosa",
+        "date" => "10/10/2023",
+        "calories" => "1 cal"
+      }
+
+      user =
+        conn
+        |> post(Routes.meals_path(conn, :create, params))
+        |> json_response(:created)
+
+      %{
+        "meal" => %{
+          "id" => id
+        }
+      } = user
+
+      params_update = %{
+        "description" => "comida maravilhosa linda demais maravilhosa",
+        "date" => "10/10/2021",
+        "calories" => "2 cal"
+      }
+
+      response =
+        conn
+        |> put(Routes.meals_path(conn, :update, id, params_update))
+        |> json_response(:ok)
+
+      assert %{
+               "meal" => %{
+                 "calories" => "2 cal",
+                 "date" => "2021-10-10T00:00:00Z",
+                 "description" => "comida maravilhosa linda demais maravilhosa",
+                 "id" => _id
+               }
+             } = response
+    end
+  end
+
   describe "delete/2" do
     test "when there is a meal with the given id, is possible deleted the meal", %{conn: conn} do
       params = %{
