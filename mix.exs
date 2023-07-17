@@ -52,7 +52,8 @@ defmodule DailyMeals.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:utc_datetime, "~> 1.0"},
-      {:excoveralls, "~> 0.10", only: :test}
+      {:excoveralls, "~> 0.10", only: :test},
+      {:ex_machina, "~> 2.7.0"}
     ]
   end
 
