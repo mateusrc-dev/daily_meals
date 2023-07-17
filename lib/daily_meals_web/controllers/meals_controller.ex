@@ -3,6 +3,7 @@ defmodule DailyMealsWeb.MealsController do
   use DailyMealsWeb, :controller
   alias DailyMeals.Meal
   alias DailyMealsWeb.FallbackController
+  alias DailyMeals.Error
 
   action_fallback(FallbackController)
 
@@ -17,14 +18,20 @@ defmodule DailyMealsWeb.MealsController do
 
     [head | tail] = date_parser
 
-    date_time = UTCDateTime.from_date(Date.new!(List.last(tail), List.first(tail), head))
+    case Date.new(List.last(tail), List.first(tail), head) do
+      {:error, :invalid_date} ->
+        {:error, Error.build(:bad_request, "Invalid date insert")}
 
-    meal_params = %{description: description, date: date_time, calories: calories}
+      {:ok, date_correct} ->
+        date_time = UTCDateTime.from_date(date_correct)
 
-    with {:ok, %Meal{} = meal} <- DailyMeals.create_meal(meal_params) do
-      conn
-      |> put_status(:created)
-      |> render("create.json", meal: meal)
+        meal_params = %{description: description, date: date_time, calories: calories}
+
+        with {:ok, %Meal{} = meal} <- DailyMeals.create_meal(meal_params) do
+          conn
+          |> put_status(:created)
+          |> render("create.json", meal: meal)
+        end
     end
   end
 
