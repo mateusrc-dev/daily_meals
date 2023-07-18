@@ -77,7 +77,7 @@ defmodule DailyMealsWeb.MealsControllerTest do
         "calories" => "1 cal"
       }
 
-      user =
+      meal =
         conn
         |> post(Routes.meals_path(conn, :create, params))
         |> json_response(:created)
@@ -86,7 +86,7 @@ defmodule DailyMealsWeb.MealsControllerTest do
         "meal" => %{
           "id" => id
         }
-      } = user
+      } = meal
 
       response =
         conn
@@ -133,7 +133,7 @@ defmodule DailyMealsWeb.MealsControllerTest do
         "calories" => "1 cal"
       }
 
-      user =
+      meal =
         conn
         |> post(Routes.meals_path(conn, :create, params))
         |> json_response(:created)
@@ -142,7 +142,7 @@ defmodule DailyMealsWeb.MealsControllerTest do
         "meal" => %{
           "id" => id
         }
-      } = user
+      } = meal
 
       params_update = %{
         "description" => "comida maravilhosa linda demais maravilhosa",
@@ -174,7 +174,7 @@ defmodule DailyMealsWeb.MealsControllerTest do
         "calories" => "1 cal"
       }
 
-      user =
+      meal =
         conn
         |> post(Routes.meals_path(conn, :create, params))
         |> json_response(:created)
@@ -183,7 +183,7 @@ defmodule DailyMealsWeb.MealsControllerTest do
         "meal" => %{
           "id" => id
         }
-      } = user
+      } = meal
 
       params_update = %{
         "description" => "comida muito muito gostosa maravilhosa linda deliciosa",
@@ -241,7 +241,7 @@ defmodule DailyMealsWeb.MealsControllerTest do
         "calories" => "1 cal"
       }
 
-      user =
+      meal =
         conn
         |> post(Routes.meals_path(conn, :create, params))
         |> json_response(:created)
@@ -250,7 +250,7 @@ defmodule DailyMealsWeb.MealsControllerTest do
         "meal" => %{
           "id" => id
         }
-      } = user
+      } = meal
 
       response =
         conn
