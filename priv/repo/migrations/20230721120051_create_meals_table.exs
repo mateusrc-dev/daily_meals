@@ -6,7 +6,7 @@ defmodule DailyMeals.Repo.Migrations.CreateMealsTable do
       add :description, :string
       add :date, :utc_datetime
       add :calories, :string
-      add :user_id, references(:users, type: :binary_id)
+      add :user_id, references(:users, type: :binary_id), on_delete: :delete_all
 
       timestamps()
     end

@@ -14,7 +14,7 @@ defmodule DailyMeals.User do
     field :email, :string
     field :name, :string
 
-    has_many :meal, Meal
+    has_many :meal, Meal, on_delete: :delete_all
 
     timestamps()
   end
