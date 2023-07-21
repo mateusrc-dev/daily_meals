@@ -1,6 +1,8 @@
 defmodule DailyMeals.Meals.DeleteTest do
   use DailyMeals.DataCase, async: true
-  alias DailyMeals.{Error, Meal}
+  alias DailyMeals.{Error, Meal, User}
+  alias DailyMeals.Meals.Create, as: MealCreate
+  alias DailyMeals.Users.Create, as: UserCreate
   alias DailyMeals.Meals.Create
   alias DailyMeals.Meals.Delete
   alias DailyMeals.Error
@@ -8,9 +10,13 @@ defmodule DailyMeals.Meals.DeleteTest do
 
   describe "call/1" do
     test "when the id is valid, is possible delete an meal" do
-      params = build(:meal_params)
+      user_params = build(:user_params)
 
-      meal = Create.call(params)
+      {:ok, %User{id: id}} = UserCreate.call(user_params)
+
+      params = build(:meal_params, %{user_id: id})
+
+      meal = MealCreate.call(params)
 
       {:ok,
        %Meal{
@@ -26,15 +32,20 @@ defmodule DailyMeals.Meals.DeleteTest do
                 date: _,
                 calories: "1 cal",
                 inserted_at: _,
-                updated_at: _
+                updated_at: _,
+                user_id: _
               }} =
                response
     end
 
     test "when the id are invalid, returns an error" do
-      params = build(:meal_params)
+      user_params = build(:user_params)
 
-      Create.call(params)
+      {:ok, %User{id: id}} = UserCreate.call(user_params)
+
+      params = build(:meal_params, %{user_id: id})
+
+      MealCreate.call(params)
 
       response = Delete.call("23ef65a1-294e-46c3-934e-718ea3c74497")
 

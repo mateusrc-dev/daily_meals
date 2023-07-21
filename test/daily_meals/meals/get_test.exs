@@ -1,16 +1,21 @@
 defmodule DailyMeals.Meals.GetTest do
   use DailyMeals.DataCase, async: true
-  alias DailyMeals.{Error, Meal}
-  alias DailyMeals.Meals.Create
+  alias DailyMeals.{Error, Meal, User}
+  alias DailyMeals.Meals.Create, as: MealCreate
+  alias DailyMeals.Users.Create, as: UserCreate
   alias DailyMeals.Meals.Get
   alias DailyMeals.Error
   import DailyMeals.Factory
 
   describe "by_id/1" do
     test "when all params are valid, returns the meal" do
-      params = build(:meal_params)
+      user_params = build(:user_params)
 
-      meal = Create.call(params)
+      {:ok, %User{id: id}} = UserCreate.call(user_params)
+
+      params = build(:meal_params, %{user_id: id})
+
+      meal = MealCreate.call(params)
 
       {:ok,
        %DailyMeals.Meal{
@@ -25,15 +30,20 @@ defmodule DailyMeals.Meals.GetTest do
                 id: id,
                 description: "comida muito muito gostosa",
                 date: date,
-                calories: "1 cal"
+                calories: "1 cal",
+                user_id: _
               }} =
                response
     end
 
     test "when the id are invalid, returns an error" do
-      params = build(:meal_params)
+      user_params = build(:user_params)
 
-      Create.call(params)
+      {:ok, %User{id: id}} = UserCreate.call(user_params)
+
+      params = build(:meal_params, %{user_id: id})
+
+      MealCreate.call(params)
 
       response = Get.by_id("23ef65a1-294e-46c3-934e-718ea3c74497")
 
