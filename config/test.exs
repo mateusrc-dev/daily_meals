@@ -8,7 +8,7 @@ use Mix.Config
 config :daily_meals, DailyMeals.Repo,
   username: "postgres",
   password: "32237489",
-  database: "daily_meals_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "daily_meals_dev#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 

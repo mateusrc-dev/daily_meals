@@ -14,7 +14,7 @@ defmodule DailyMeals.MealTest do
                response
     end
 
-    test "when updating a changeset, returns invalid changeset with the given changes" do
+    test "when updating a changeset, returns an valid changeset with the given changes" do
       params = build(:meal_params)
 
       new_date = UTCDateTime.from_date(Date.new!(2021, 11, 11))
