@@ -34,17 +34,13 @@ defmodule DailyMeals.Users.UpdateTest do
     test "when the id are invalid, returns an error" do
       user_params = build(:user_params)
 
-      {:ok, %User{id: id}} = UserCreate.call(user_params)
-
-      params = build(:meal_params, %{user_id: id})
-
-      MealCreate.call(params)
+      Create.call(user_params)
 
       params_update = %{
         "id" => "23ef65a1-294e-46c3-934e-718ea3c74497",
-        "description" => "comida muito muito gostosa maravilhosa linda demais",
-        "date" => UTCDateTime.from_date(Date.new!(2021, 10, 10)),
-        "calories" => "3 cal"
+        "name" => "Mateus Carvalho",
+        "cpf" => "12345678902",
+        "email" => "mateus_raimundo95@email.com"
       }
 
       response = Update.call(params_update)
