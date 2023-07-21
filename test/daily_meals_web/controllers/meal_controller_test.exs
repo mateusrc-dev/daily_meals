@@ -1,14 +1,20 @@
 defmodule DailyMealsWeb.MealsControllerTest do
   use DailyMealsWeb.ConnCase, async: true
-  alias DailyMeals.Meal
+  alias DailyMeals.{Meal, User}
+  alias DailyMeals.Users.Create, as: UserCreate
   import DailyMeals.Factory
 
   describe "create/2" do
     test "when all params are valid, creates the meal", %{conn: conn} do
+      user_params = build(:user_params)
+
+      {:ok, %User{id: id}} = UserCreate.call(user_params)
+
       params = %{
         "description" => "comida muito muito gostosa",
         "date" => "10/10/2023",
-        "calories" => "1 cal"
+        "calories" => "1 cal",
+        "user_id" => id
       }
 
       response =
@@ -21,17 +27,23 @@ defmodule DailyMealsWeb.MealsControllerTest do
                  "calories" => "1 cal",
                  "date" => "2023-10-10T00:00:00Z",
                  "description" => "comida muito muito gostosa",
-                 "id" => _id
+                 "id" => _id,
+                 "user_id" => _
                },
                "message" => "Meal created!"
              } = response
     end
 
     test "when there is some error, returns an error", %{conn: conn} do
+      user_params = build(:user_params)
+
+      {:ok, %User{id: id}} = UserCreate.call(user_params)
+
       params = %{
         "description" => "comida",
         "date" => "10/10/2023",
-        "calories" => "1 c"
+        "calories" => "1 c",
+        "user_id" => id
       }
 
       response =
@@ -50,10 +62,15 @@ defmodule DailyMealsWeb.MealsControllerTest do
     end
 
     test "when there an date invalid, returns an error of date invalid", %{conn: conn} do
+      user_params = build(:user_params)
+
+      {:ok, %User{id: id}} = UserCreate.call(user_params)
+
       params = %{
         "description" => "comida linda maravilhosa",
         "date" => "10/13/2023",
-        "calories" => "1 cal"
+        "calories" => "1 cal",
+        "user_id" => id
       }
 
       response =
@@ -71,10 +88,15 @@ defmodule DailyMealsWeb.MealsControllerTest do
     test "when there is a meal with the given id, is possible show this meal in screen", %{
       conn: conn
     } do
+      user_params = build(:user_params)
+
+      {:ok, %User{id: id}} = UserCreate.call(user_params)
+
       params = %{
         "description" => "comida muito muito gostosa",
         "date" => "10/10/2023",
-        "calories" => "1 cal"
+        "calories" => "1 cal",
+        "user_id" => id
       }
 
       meal =
@@ -98,7 +120,8 @@ defmodule DailyMealsWeb.MealsControllerTest do
                  "description" => "comida muito muito gostosa",
                  "date" => _date,
                  "calories" => "1 cal",
-                 "id" => _id
+                 "id" => _id,
+                 "user_id" => _
                }
              } = response
     end
@@ -106,10 +129,15 @@ defmodule DailyMealsWeb.MealsControllerTest do
     test "when there is a meal with the given invalid id, returns an error", %{
       conn: conn
     } do
+      user_params = build(:user_params)
+
+      {:ok, %User{id: id}} = UserCreate.call(user_params)
+
       params = %{
         "description" => "comida muito muito gostosa",
         "date" => "10/10/2023",
-        "calories" => "1 cal"
+        "calories" => "1 cal",
+        "user_id" => id
       }
 
       conn
@@ -127,10 +155,15 @@ defmodule DailyMealsWeb.MealsControllerTest do
 
   describe "update/2" do
     test "when all params are valid, is possible updated the meal", %{conn: conn} do
+      user_params = build(:user_params)
+
+      {:ok, %User{id: user_id}} = UserCreate.call(user_params)
+
       params = %{
         "description" => "comida muito muito gostosa",
         "date" => "10/10/2023",
-        "calories" => "1 cal"
+        "calories" => "1 cal",
+        "user_id" => user_id
       }
 
       meal =
@@ -147,7 +180,8 @@ defmodule DailyMealsWeb.MealsControllerTest do
       params_update = %{
         "description" => "comida maravilhosa linda demais maravilhosa",
         "date" => "10/10/2021",
-        "calories" => "2 cal"
+        "calories" => "2 cal",
+        "user_id" => user_id
       }
 
       response =
@@ -160,7 +194,8 @@ defmodule DailyMealsWeb.MealsControllerTest do
                  "calories" => "2 cal",
                  "date" => "2021-10-10T00:00:00Z",
                  "description" => "comida maravilhosa linda demais maravilhosa",
-                 "id" => _id
+                 "id" => _id,
+                 "user_id" => _
                }
              } = response
     end
@@ -168,10 +203,15 @@ defmodule DailyMealsWeb.MealsControllerTest do
     test "when is not send the date, is possible updated the meal without change the date", %{
       conn: conn
     } do
+      user_params = build(:user_params)
+
+      {:ok, %User{id: user_id}} = UserCreate.call(user_params)
+
       params = %{
         "description" => "comida muito muito gostosa",
         "date" => "10/10/2023",
-        "calories" => "1 cal"
+        "calories" => "1 cal",
+        "user_id" => user_id
       }
 
       meal =
@@ -200,16 +240,22 @@ defmodule DailyMealsWeb.MealsControllerTest do
                  "calories" => "3 cal",
                  "date" => "2023-10-10T00:00:00Z",
                  "description" => "comida muito muito gostosa maravilhosa linda deliciosa",
-                 "id" => _id
+                 "id" => _id,
+                 "user_id" => _
                }
              } = response
     end
 
     test "when there is a meal with the given invalid id, returns an error", %{conn: conn} do
+      user_params = build(:user_params)
+
+      {:ok, %User{id: user_id}} = UserCreate.call(user_params)
+
       params = %{
         "description" => "comida muito muito gostosa",
         "date" => "10/10/2023",
-        "calories" => "1 cal"
+        "calories" => "1 cal",
+        "user_id" => user_id
       }
 
       conn
@@ -219,7 +265,8 @@ defmodule DailyMealsWeb.MealsControllerTest do
       params_update = %{
         "description" => "comida maravilhosa linda demais maravilhosa",
         "date" => "10/10/2021",
-        "calories" => "2 cal"
+        "calories" => "2 cal",
+        "user_id" => user_id
       }
 
       response =
@@ -235,10 +282,15 @@ defmodule DailyMealsWeb.MealsControllerTest do
 
   describe "delete/2" do
     test "when there is a meal with the given id, is possible deleted the meal", %{conn: conn} do
+      user_params = build(:user_params)
+
+      {:ok, %User{id: user_id}} = UserCreate.call(user_params)
+
       params = %{
         "description" => "comida muito muito gostosa",
         "date" => "10/10/2023",
-        "calories" => "1 cal"
+        "calories" => "1 cal",
+        "user_id" => user_id
       }
 
       meal =
@@ -261,10 +313,15 @@ defmodule DailyMealsWeb.MealsControllerTest do
     end
 
     test "when there is a meal with the given invalid id, returns an error", %{conn: conn} do
+      user_params = build(:user_params)
+
+      {:ok, %User{id: user_id}} = UserCreate.call(user_params)
+
       params = %{
         "description" => "comida muito muito gostosa",
         "date" => "10/10/2023",
-        "calories" => "1 cal"
+        "calories" => "1 cal",
+        "user_id" => user_id
       }
 
       conn
