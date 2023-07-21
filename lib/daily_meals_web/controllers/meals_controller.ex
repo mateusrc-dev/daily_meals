@@ -7,7 +7,12 @@ defmodule DailyMealsWeb.MealsController do
 
   action_fallback(FallbackController)
 
-  def create(conn, %{"description" => description, "date" => date, "calories" => calories}) do
+  def create(conn, %{
+        "description" => description,
+        "date" => date,
+        "calories" => calories,
+        "user_id" => user_id
+      }) do
     date_parser =
       date
       |> String.trim()
@@ -25,7 +30,12 @@ defmodule DailyMealsWeb.MealsController do
       {:ok, date_correct} ->
         date_time = UTCDateTime.from_date(date_correct)
 
-        meal_params = %{description: description, date: date_time, calories: calories}
+        meal_params = %{
+          description: description,
+          date: date_time,
+          calories: calories,
+          user_id: user_id
+        }
 
         with {:ok, %Meal{} = meal} <- DailyMeals.create_meal(meal_params) do
           conn
@@ -53,7 +63,13 @@ defmodule DailyMealsWeb.MealsController do
 
   def update(
         conn,
-        %{"id" => id, "description" => description, "date" => date, "calories" => calories} =
+        %{
+          "id" => id,
+          "description" => description,
+          "date" => date,
+          "calories" => calories,
+          "user_id" => user_id
+        } =
           _params
       ) do
     date_parser =
@@ -72,7 +88,8 @@ defmodule DailyMealsWeb.MealsController do
       "id" => id,
       "description" => description,
       "date" => date_time,
-      "calories" => calories
+      "calories" => calories,
+      "user_id" => user_id
     }
 
     with {:ok, %Meal{} = meal} <- DailyMeals.update_meal(meal_params) do

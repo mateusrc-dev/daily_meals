@@ -1,14 +1,14 @@
-defmodule DailyMeals.Meals.Create do
-  alias DailyMeals.{Error, Meal, Repo}
+defmodule DailyMeals.Users.Create do
+  alias DailyMeals.{Error, User, Repo}
 
   def call(params) do
     params
-    |> Meal.changeset()
+    |> User.changeset()
     |> Repo.insert()
     |> handle_insert()
   end
 
-  defp handle_insert({:ok, %Meal{}} = result) do
+  defp handle_insert({:ok, %User{}} = result) do
     result
   end
 

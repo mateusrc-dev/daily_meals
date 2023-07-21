@@ -12,6 +12,7 @@ defmodule DailyMealsWeb.Router do
 
     get "/", WelcomeController, :index
     resources "/meals/", MealsController, except: [:new, :edit]
+    resources "/users", UsersController, except: [:new, :edit]
   end
 
   # Enables LiveDashboard only for development
